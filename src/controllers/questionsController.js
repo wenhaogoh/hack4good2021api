@@ -2,7 +2,7 @@ const db = require("../../models/index.js");
 const Question = db.Question;
 const Choice = db.Choice;
 
-async function getAllQuestions(req, res) {
+async function getAllQuestions(req, res, next) {
   try {
     const questions = await Question.findAll();
     const questionIds = questions.map((question) => question.id);
@@ -47,7 +47,7 @@ async function deleteQuestion(req, res, next) {
   }
 }
 
-async function showQuestion(req, res) {
+async function showQuestion(req, res, next) {
   try {
     res.status(200).json(req.question);
   } catch (e) {

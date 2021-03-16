@@ -1,7 +1,7 @@
 const db = require("../../models/index.js");
 const Choice = db.Choice;
 
-async function getAllChoices(req, res) {
+async function getAllChoices(req, res, next) {
   try {
     const choices = await Choice.findAll();
     res.status(200).json(choices);
@@ -56,7 +56,7 @@ async function deleteChoice(req, res, next) {
   }
 }
 
-async function showChoice(req, res) {
+async function showChoice(req, res, next) {
   try {
     res.status(200).json(req.choice);
   } catch (e) {
