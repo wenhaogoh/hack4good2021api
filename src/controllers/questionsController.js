@@ -4,9 +4,14 @@ const Choice = db.Choice;
 
 async function getAllQuestions(req, res, next) {
   try {
-    const questions = await Question.findAll();
-    const questionIds = questions.map((question) => question.id);
-    res.status(200).json(questionIds);
+    const questions = await Question.findAll({
+      include: [
+        {
+          model: Choice,
+        },
+      ],
+    });
+    res.status(200).json(questions);
   } catch (e) {
     next(e);
   }
@@ -38,6 +43,16 @@ async function createQuestion(req, res, next) {
   }
 }
 
+async function updateQuestion(req, res, next) {
+  try {
+    const updatedQuestion = await req.question.update(req.body);
+    req.question = updatedQuestion;
+    next();
+  } catch (e) {
+    next(e);
+  }
+}
+
 async function deleteQuestion(req, res, next) {
   try {
     await req.question.destroy();
@@ -59,5 +74,6 @@ module.exports = {
   getAllQuestionsFuncs: [getAllQuestions],
   getQuestionFuncs: [getQuestion, showQuestion],
   createQuestionFuncs: [createQuestion, showQuestion],
+  updateQuestionFuncs: [getQuestion, updateQuestion, showQuestion],
   deleteQuestionFuncs: [getQuestion, deleteQuestion, showQuestion],
 };
