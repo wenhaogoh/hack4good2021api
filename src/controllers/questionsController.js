@@ -1,3 +1,4 @@
+const { sequelize } = require("../../models/index.js");
 const db = require("../../models/index.js");
 const Question = db.Question;
 const Choice = db.Choice;
@@ -54,10 +55,20 @@ async function updateQuestion(req, res, next) {
 }
 
 async function deleteQuestion(req, res, next) {
+  const question = req.question;
+  const t = await sequelize.transaction();
   try {
-    await req.question.destroy();
+    const relatedChoices = await question.getChoices({ raw: true });
+    const relatedChoiceIds = relatedChoices.map((choice) => choice.id);
+    await Choice.destroy(
+      { where: { id: relatedChoiceIds } },
+      { transaction: t }
+    );
+    await req.question.destroy({ transaction: t });
+    await t.commit();
     next();
   } catch (e) {
+    await t.rollback();
     next(e);
   }
 }
