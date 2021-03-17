@@ -1,6 +1,8 @@
 # The Social Census
 
-For more information, visit https://github.com/wenhaogoh/hack4good2021.
+This is a prototype built for Hack For Good 2021 and is currently deployed at: https://hack4good2021.herokuapp.com/
+
+For more information, visit: https://github.com/wenhaogoh/hack4good2021
 
 ## Inital setup
 
